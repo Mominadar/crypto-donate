@@ -1,5 +1,6 @@
 import { json } from "@remix-run/node";
 import { db } from "~/utils/db.server";
+import { sendTransaction } from "./crypto.server";
 
 export async function getTransactions() {
     const transactions = await db.transaction.findMany({
@@ -33,5 +34,6 @@ export async function createTransaction(body: any) {
                 { connect: { id: Number(organizationId) } },
         },
     });
+    await sendTransaction( Number(amount));
     return json({ success: true });
 }
