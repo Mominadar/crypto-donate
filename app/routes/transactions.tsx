@@ -1,39 +1,25 @@
 import { useActionData, useLoaderData, useSubmit } from '@remix-run/react';
 import { MetaFunction } from '@remix-run/react/dist/routeModules'
-import { ActionArgs, LoaderArgs } from '@remix-run/server-runtime';
+import { LoaderArgs } from '@remix-run/server-runtime';
 import { useEffect, useRef, useState } from 'react';
 import Modal from '~/components/modal';
-import Table from '~/components/organization-table'
+import Table from '~/components/transaction-table'
 import { toast } from 'react-toastify';
-import { getOrganizations } from 'server/organization.server';
-import { createTransaction } from 'server/transaction.server';
+import { getTransactions } from 'server/transaction.server';
 
 export let meta: MetaFunction = () => {
   return {
-    title: 'Crypto Donate',
+    title: 'Remix Template',
   }
 }
 
 export const loader = async ({ request }: LoaderArgs) => {
-  const organizations = await getOrganizations();
-  return { organizations };
+  const transactions = await getTransactions();
+  return { transactions };
 };
 
-export async function action({ request }: ActionArgs) {
-  try {
-    const body = await request.formData();
-    return createTransaction(body);
-  } catch (error) {
-    if (error instanceof Error) {
-      return { error: error.message };
-    }
-    return { error: 'Something went wrong! Try again!' };
-  }
-}
-
-
-export default function Index() {
-  const { organizations } = useLoaderData<typeof loader>();
+export default function Transactions() {
+  const { transactions } = useLoaderData<typeof loader>();
   const [selectedOrganization, setSelectedOrganization] = useState(null);
   const formRef = useRef<HTMLFormElement>(null);
   const data = useActionData();
@@ -62,7 +48,7 @@ export default function Index() {
     }
   };
   return <div>
-    <Table rows={organizations} setSelectedOrganization={setSelectedOrganization} />
+    <Table rows={transactions} setSelectedOrganization={setSelectedOrganization} />
     {selectedOrganization && <Modal formRef={formRef}
       setSelectedOrganization={setSelectedOrganization} onSubmit={handleSubmit}
     />}

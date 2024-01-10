@@ -10,6 +10,8 @@ import {
 } from '@remix-run/react'
 import { LinksFunction, MetaFunction } from '@remix-run/react/dist/routeModules'
 import * as React from 'react'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
 import globalStylesUrl from '~/styles/global.css'
 
@@ -70,6 +72,7 @@ function Document({
         <ScrollRestoration />
         <Scripts />
         {process.env.NODE_ENV === 'development' && <LiveReload />}
+        <ToastContainer/>
       </body>
     </html>
   )

@@ -8,10 +8,23 @@ datasource db {
 }
 
 model Organization {
-  id    String @id @default(cuid())
+  id    Int    @id @default(autoincrement())
   name  String
   about String
 
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @default(now()) @updatedAt
+  Transaction Transaction[]
+}
+
+model Transaction {
+  id             Int          @id @default(autoincrement())
+  amount         Float
+  userName       String
+  userEmail      String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId Int
+
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 }
